@@ -52,12 +52,6 @@ void piuio_task(void) {
     inputData[CABINET] = gpio_get(pinSwitch[10]) ? tu_bit_set(inputData[1], 1) : tu_bit_clear(inputData[1], 1);
     inputData[CABINET] = gpio_get(pinSwitch[11]) ? tu_bit_set(inputData[1], 6) : tu_bit_clear(inputData[1], 6);
 
-    // Write pad lamps
-    for (int i = 0; i < 5; i++) {
-        gpio_put(pinLED[i], tu_bit_test(lamp.data[PLAYER_1], pos[i] + 2));
-        gpio_put(pinLED[i+5], tu_bit_test(lamp.data[PLAYER_2], pos[i] + 2));
-    }
-
     // Write the bass neon to the onboard LED for testing + kicks
     gpio_put(25, lamp.bass_light);
 
@@ -79,11 +73,6 @@ int main(void) {
         gpio_init(pinSwitch[i]);
         gpio_set_dir(pinSwitch[i], false);
         gpio_pull_up(pinSwitch[i]);
-    }
-
-    for (int i = 0; i < 10; i++) {
-        gpio_init(pinLED[i]);
-        gpio_set_dir(pinLED[i], true);
     }
 
     // init device stack on configured roothub port

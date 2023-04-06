@@ -15,12 +15,25 @@ static struct lampArray* lamp;
 
 void ws2812_update() {
     // Write lamp.data to WS2812Bs
-    put_pixel(lamp->l1_halo ? ws2812_color[0] : urgb_u32(0, 0, 0));
-    put_pixel(lamp->l2_halo ? ws2812_color[1] : urgb_u32(0, 0, 0));
-    for (int i = 0; i < 4; i++)
-        put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0));
-    put_pixel(lamp->r2_halo ? ws2812_color[3] : urgb_u32(0, 0, 0));
-    put_pixel(lamp->r1_halo ? ws2812_color[4] : urgb_u32(0, 0, 0));
+    put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0));  // Top middle
+    put_pixel(lamp->l1_halo ? ws2812_color[1] : urgb_u32(0, 0, 0));     // Top left
+    put_pixel(lamp->l2_halo ? ws2812_color[0] : urgb_u32(0, 0, 0));     // Bottom left
+    put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0));  // Bottom middle
+    put_pixel(lamp->r2_halo ? ws2812_color[0] : urgb_u32(0, 0, 0));     // Bottom right
+    put_pixel(lamp->r1_halo ? ws2812_color[1] : urgb_u32(0, 0, 0));     // Top right
+    put_pixel(lamp->p2_ur_light ? ws2812_color[1] : urgb_u32(0, 0, 0)); // P2 UR
+    put_pixel(lamp->p2_dr_light ? ws2812_color[2] : urgb_u32(0, 0, 0)); // P2 DR
+    put_pixel(lamp->p2_cn_light ? ws2812_color[3] : urgb_u32(0, 0, 0)); // P2 CN
+    put_pixel(lamp->p2_dl_light ? ws2812_color[2] : urgb_u32(0, 0, 0)); // P2 DL
+    put_pixel(lamp->p2_ul_light ? ws2812_color[1] : urgb_u32(0, 0, 0)); // P2 UL
+    put_pixel(lamp->p1_ur_light ? ws2812_color[1] : urgb_u32(0, 0, 0)); // P1 UR
+    put_pixel(lamp->p1_dr_light ? ws2812_color[2] : urgb_u32(0, 0, 0)); // P1 DR
+    put_pixel(lamp->p1_cn_light ? ws2812_color[3] : urgb_u32(0, 0, 0)); // P1 CN
+    put_pixel(lamp->p1_dl_light ? ws2812_color[2] : urgb_u32(0, 0, 0)); // P1 DL
+    put_pixel(lamp->p1_ul_light ? ws2812_color[1] : urgb_u32(0, 0, 0)); // P1 UL
+    put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0)); // Logo 1
+    put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0)); // Logo 2
+    put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0)); // Logo 3
 }
 
 void ws2812_core1() {
