@@ -1,8 +1,6 @@
 # PIUIO-PICO
 
-This is a Pump it Up IO board (PIUIO) clone based on the Raspberry Pi Pico microcontroller.
-
-Though designed for [dj505's PicoFX handpump controller](https://github.com/dj505/PicoFX), this will work with DIY hand pump controller builds, and can probably be adapted for pad use, too.
+This is a Pump it Up IO board (PIUIO) clone based on the Raspberry Pi Pico (RP2040) microcontroller, initially designed for [the PicoFX](https://github.com/dj505/PicoFX).
 
 ## Hardware Setup
 You don't need many components to put one together:
@@ -24,11 +22,9 @@ General overview:
  - With the Pico unplugged from the PC, hold the "BOOTSEL" button on the Pico, then plug in the Pico.
  - The Pico will now show up as a "flash drive" in your OS. Copy the .UF2 file onto the Pico, and the code will be uploaded!
 
-
 ## PIU Online Notice
 Using a hand controller with games connected to the official Pump it Up online service is considered cheating by Andamiro and may lead to actions being taken against your account.
 As such, this use case is not officially endorsed by piuio-pico.
-
 
 ## Credits
 This project is based off of the [tinyusb device USB examples](https://github.com/hathach/tinyusb/tree/master/examples/device) (specifically webusb_serial and hid_generic_input)
