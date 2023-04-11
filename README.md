@@ -1,6 +1,6 @@
 # PIUIO-PICO
 
-This is a Pump it Up IO board (PIUIO) clone based on the Raspberry Pi Pico (RP2040) microcontroller, initially designed for [the PicoFX](https://github.com/dj505/PicoFX).
+This is a Pump it Up IO board (PIUIO) clone based on the Raspberry Pi Pico (RP2040) microcontroller, initially designed for [the PicoFX](https://github.com/dj505/PicoFX). Currently, this fork only supports the PicoLX. Support for both boards will be added in the future.
 
 ## Hardware Setup
 You don't need many components to put one together:
@@ -21,6 +21,16 @@ General overview:
  - Inside the build folder, run `cmake ..`, then run `make`. You'll get a .UF2 file in the build folder that you can upload to the Pico!
  - With the Pico unplugged from the PC, hold the "BOOTSEL" button on the Pico, then plug in the Pico.
  - The Pico will now show up as a "flash drive" in your OS. Copy the .UF2 file onto the Pico, and the code will be uploaded!
+
+# Notes / Troubleshooting
+Apparently, there's a weird hardware quirk with the RP2040 where if the oscillator takes too long to start, the board will not start up properly. This does not prevent the board from entering bootloader mode when BOOTSEL is held, but it does make it seem like the board no longer responds, or "loses" the program code after every subsequet shutdown/power off, despite initially working properly after being flashed.  
+The solution to this issue is to change the PICO_XOSC_STARTUP_DELAY_MULTIPLIER in CMakeLists.txt:  
+```
+add_compile_definitions(
+    PICO_XOSC_STARTUP_DELAY_MULTIPLIER=64
+)
+```  
+If your board doesn't seem to respond, or suffers from this issue despite the added delay, try changing it to another power of 2 (128, 256, etc.) until you get reliable results. You shouldn't need to do this, though.
 
 ## PIU Online Notice
 Using a hand controller with games connected to the official Pump it Up online service is considered cheating by Andamiro and may lead to actions being taken against your account.

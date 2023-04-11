@@ -13,33 +13,53 @@ semaphore_t sem;
 
 static struct lampArray* lamp;
 
-void ws2812_update() {
-    // Write lamp.data to WS2812Bs
-    put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0));   // Top middle
-    put_pixel(lamp->l1_halo ? ws2812_color[1] : urgb_u32(0, 0, 0));      // Top left
-    put_pixel(lamp->l2_halo ? ws2812_color[0] : urgb_u32(0, 0, 0));      // Bottom left
-    put_pixel(lamp->bass_light ? ws2812_color[3] : urgb_u32(0, 0, 0));   // Bottom middle
-    put_pixel(lamp->r2_halo ? ws2812_color[0] : urgb_u32(0, 0, 0));      // Bottom right
-    put_pixel(lamp->r1_halo ? ws2812_color[1] : urgb_u32(0, 0, 0));      // Top right
-    put_pixel(lamp->p2_ur_light ? ws2812_color[14] : urgb_u32(0, 0, 0)); // P2 UR
-    put_pixel(lamp->p2_dr_light ? ws2812_color[15] : urgb_u32(0, 0, 0)); // P2 DR
-    put_pixel(lamp->p2_cn_light ? ws2812_color[13] : urgb_u32(0, 0, 0)); // P2 CN
-    put_pixel(lamp->p2_dl_light ? ws2812_color[11] : urgb_u32(0, 0, 0)); // P2 DL
-    put_pixel(lamp->p2_ul_light ? ws2812_color[12] : urgb_u32(0, 0, 0)); // P2 UL
-    put_pixel(lamp->p1_ur_light ? ws2812_color[9] : urgb_u32(0, 0, 0));  // P1 UR
-    put_pixel(lamp->p1_dr_light ? ws2812_color[10] : urgb_u32(0, 0, 0)); // P1 DR
-    put_pixel(lamp->p1_cn_light ? ws2812_color[8] : urgb_u32(0, 0, 0));  // P1 CN
-    put_pixel(lamp->p1_dl_light ? ws2812_color[6] : urgb_u32(0, 0, 0));  // P1 DL
-    put_pixel(lamp->p1_ul_light ? ws2812_color[7] : urgb_u32(0, 0, 0));  // P1 UL
-    put_pixel(lamp->bass_light ? ws2812_color[16] : urgb_u32(0, 0, 0));  // Logo 1
-    put_pixel(lamp->bass_light ? ws2812_color[17] : urgb_u32(0, 0, 0));  // Logo 2
-    put_pixel(lamp->bass_light ? ws2812_color[18] : urgb_u32(0, 0, 0));  // Logo 3
+// Borrowed from https://github.com/speedypotato/Pico-Game-Controller
+uint32_t color_wheel(uint16_t wheel_pos) {
+  wheel_pos %= 768;
+  if (wheel_pos < 256) {
+    return urgb_u32(wheel_pos, 255 - wheel_pos, 0);
+  } else if (wheel_pos < 512) {
+    wheel_pos -= 256;
+    return urgb_u32(255 - wheel_pos, 0, wheel_pos);
+  } else {
+    wheel_pos -= 512;
+    return urgb_u32(0, wheel_pos, 255 - wheel_pos);
+  }
+}
+
+void ws2812_update(uint32_t counter) {
+  // Write lamp.data to WS2812Bs
+  put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0));   // Top middle
+  put_pixel(lamp->l1_halo ? ws2812_color[1] : urgb_u32(0, 0, 0));      // Top left
+  put_pixel(lamp->l2_halo ? ws2812_color[0] : urgb_u32(0, 0, 0));      // Bottom left
+  put_pixel(lamp->bass_light ? ws2812_color[3] : urgb_u32(0, 0, 0));   // Bottom middle
+  put_pixel(lamp->r2_halo ? ws2812_color[0] : urgb_u32(0, 0, 0));      // Bottom right
+  put_pixel(lamp->r1_halo ? ws2812_color[1] : urgb_u32(0, 0, 0));      // Top right
+  put_pixel(lamp->p2_ur_light ? ws2812_color[14] : urgb_u32(0, 0, 0)); // P2 UR
+  put_pixel(lamp->p2_dr_light ? ws2812_color[15] : urgb_u32(0, 0, 0)); // P2 DR
+  put_pixel(lamp->p2_cn_light ? ws2812_color[13] : urgb_u32(0, 0, 0)); // P2 CN
+  put_pixel(lamp->p2_dl_light ? ws2812_color[11] : urgb_u32(0, 0, 0)); // P2 DL
+  put_pixel(lamp->p2_ul_light ? ws2812_color[12] : urgb_u32(0, 0, 0)); // P2 UL
+  put_pixel(lamp->p1_ur_light ? ws2812_color[9] : urgb_u32(0, 0, 0));  // P1 UR
+  put_pixel(lamp->p1_dr_light ? ws2812_color[10] : urgb_u32(0, 0, 0)); // P1 DR
+  put_pixel(lamp->p1_cn_light ? ws2812_color[8] : urgb_u32(0, 0, 0));  // P1 CN
+  put_pixel(lamp->p1_dl_light ? ws2812_color[6] : urgb_u32(0, 0, 0));  // P1 DL
+  put_pixel(lamp->p1_ul_light ? ws2812_color[7] : urgb_u32(0, 0, 0));  // P1 UL
+
+  for (int i = 0; i < 3; ++i) {
+    put_pixel(color_wheel((counter + i * (int)(768 / 10)) % 768));
+  }
+
+  // put_pixel(lamp->bass_light ? ws2812_color[16] : urgb_u32(0, 0, 0));  // Logo 1
+  // put_pixel(lamp->bass_light ? ws2812_color[17] : urgb_u32(0, 0, 0));  // Logo 2
+  // put_pixel(lamp->bass_light ? ws2812_color[18] : urgb_u32(0, 0, 0));  // Logo 3
 }
 
 void ws2812_core1() {
+    uint32_t counter = 0;
     while (true) {
         ws2812_lock_mtx();
-        ws2812_update();
+        ws2812_update(++counter);
         ws2812_unlock_mtx();
         sleep_ms(5);
     }

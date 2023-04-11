@@ -53,7 +53,7 @@ void piuio_task(void) {
     inputData[CABINET] = gpio_get(pinSwitch[11]) ? tu_bit_set(inputData[1], 6) : tu_bit_clear(inputData[1], 6);
 
     // Write the bass neon to the onboard LED for testing + kicks
-    //gpio_put(25, lamp.bass_light);
+    // gpio_put(25, lamp.bass_light);
 
     #ifdef ENABLE_WS2812_SUPPORT
     ws2812_unlock_mtx();

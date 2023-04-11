@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2019 Ha Thach (tinyusb.org)
@@ -112,10 +112,10 @@ uint8_t const * tud_descriptor_configuration_cb(uint8_t index)
 char const* string_desc_arr [] =
         {
                 (const char[]) { 0x09, 0x04 }, // 0: is supported language is English (0x0409)
-                "Andamirn'to",                     // 1: Manufacturer
-                "Andamirn'to PIUIO",              // 2: Product
+                "dj505",                       // 1: Manufacturer
+                "PicoLX PIUIO",                // 2: Product
                 "123456",                      // 3: Serials, should use chip ID
-                "PIUIO-pico"               // 4: Vendor Interface
+                "PIUIO-pico"                   // 4: Vendor Interface
         };
 
 static uint16_t _desc_str[32];
