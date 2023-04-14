@@ -13,20 +13,6 @@ semaphore_t sem;
 
 static struct lampArray* lamp;
 
-// Borrowed from https://github.com/speedypotato/Pico-Game-Controller
-uint32_t color_wheel(uint16_t wheel_pos) {
-  wheel_pos %= 768;
-  if (wheel_pos < 256) {
-    return urgb_u32(wheel_pos, 255 - wheel_pos, 0);
-  } else if (wheel_pos < 512) {
-    wheel_pos -= 256;
-    return urgb_u32(255 - wheel_pos, 0, wheel_pos);
-  } else {
-    wheel_pos -= 512;
-    return urgb_u32(0, wheel_pos, 255 - wheel_pos);
-  }
-}
-
 void ws2812_update(uint32_t counter) {
   // Write lamp.data to WS2812Bs
   put_pixel(lamp->bass_light ? ws2812_color[2] : urgb_u32(0, 0, 0));   // Top middle
